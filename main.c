@@ -28,9 +28,14 @@ int main()
 
 	else
 	{
+		int wait = 0;
+		if (s[strlen(s)-1] == '&') {
+			wait = 1;
+			s[strlen(s)-1] = '\0';
+		}
 		argc = makeargs(s, &argv);
 	  	if(argc != -1)
-	  		forkIt(argv);
+	  		forkIt(argv, wait);
 	  
 	  	clean(argc, argv);
 	  	argv = NULL;

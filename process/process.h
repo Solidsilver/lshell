@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-void forkIt(char ** argv);
+void forkIt(char ** argv, int wait);
+int isBackground(char * cmd);
 
 #endif
