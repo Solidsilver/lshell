@@ -1,7 +1,7 @@
-all:	lab6
+all:	lab7
 
-lab6:	main.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o
-	gcc -g main.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o -o ussh
+lab7:	cscd340lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o
+	gcc -g cscd340lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o -o ussh
 
 makeArgs.o:	./tokenize/makeArgs.c ./tokenize/makeArgs.h
 	gcc -g -c ./tokenize/makeArgs.c
