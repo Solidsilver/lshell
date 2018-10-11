@@ -1,0 +1,10 @@
+#Junk
+*.pdf
+.DS_Store
+
+#Build output
+*.o
+ussh
+
+#Folders
+*dSYM/
