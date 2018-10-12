@@ -1,0 +1,27 @@
+Need to provide:
+1) & (background process)
+    - 
+2) | Multiple pipes (recursive vs other method for doing this?)
+3) PATH extension
+4) read from .usshrc on startup (batch file). (Allow Batch file to be read as a set of commands?)
+    read PATH and HISTCOUNT and HISTFILECOUNT from batch file
+5) History file .ussh_history (read from and write to upon exit);
+    - create a LinkedList to hold every current history item.
+6) Aliasing (alias SOMETHING='somethingelse') and unaliasing
+    - LinkedList holding the alias name and it's value. Substitute in before execution. (after makeargs)
+7) Redirection: < > >> <<
+8) CD using chdir.
+
+In order of precident, the main method will:
+    Before commands:
+1) read .usshrc and .ussh_history
+2) initialize defaults if not found
+    Command Processing
+1) Check for | or & (maybe && or ||) and seperate out execution of commands.
+2) Parse each command and replace $VAR's, and aliases (if they are the actuall program name. args[0]);
+3) Check variable declaration/assignment (ex. PATH)
+4) Check if command is a builtin, and run self-definition.
+5) if not a builtin, run command, handling forking and possible piping/background run.
+
+
+Updated order of precident?:

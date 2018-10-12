@@ -15,6 +15,9 @@
 #include <string.h>
 
 #define MAX 100
+#define SHN "lsh"
+#define VER 0.1
+
 
 
 /**

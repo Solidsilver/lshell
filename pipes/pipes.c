@@ -56,7 +56,7 @@ void pipeIt(char ** prePipe, char ** postPipe)
 			dup2(fd[0], 0);
 			close(fd[0]);
 			ret = execvp(postPipe[0], postPipe);
-			printf("ussh: %s : command not found\n", postPipe[0]);
+			printf("%s: %s : command not found\n", SHN, postPipe[0]);
         	exit(ret);
 		} else {
 			close(fd[0]);
@@ -66,7 +66,7 @@ void pipeIt(char ** prePipe, char ** postPipe)
 			ret = execvp(prePipe[0], prePipe);
 			dup2(saved_stdout, 1);
 			close(saved_stdout);
-			printf("ussh: %s : command not found\n", prePipe[0]);
+			printf("%s: %s : command not found\n", SHN, prePipe[0]);
 			exit(ret);
 		}
 	}

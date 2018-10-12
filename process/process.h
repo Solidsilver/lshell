@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include "../utils/myUtils.h"
 
 void forkIt(char ** argv, int wait);
 int isBackground(char * cmd);

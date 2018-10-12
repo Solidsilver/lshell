@@ -3,14 +3,23 @@
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
 
+void printPrompt() {
+	printf(SHN);
+	printf("-");
+	printf("%.2f", VER);
+	printf("$ ");
+}
+
 int main()
 {
   int argc, pipeCount;	
   char **argv = NULL, s[MAX];
   int preCount = 0, postCount = 0;
   char ** prePipe = NULL, ** postPipe = NULL;
+  char * prompt = SHN;
   
-  printf("command?: ");
+  //printf("command?: ");
+  printPrompt();
   fgets(s, MAX, stdin);
   strip(s);
 
@@ -41,13 +50,16 @@ int main()
 	  	argv = NULL;
 	}
 	
-	printf("command?: ");
+	//printf("command?: ");
+	printPrompt();
 	fgets(s, MAX, stdin);
-      	strip(s);
+	strip(s);
 
   }// end while
 
   return 0;
 
 }// end main
+
+
 
