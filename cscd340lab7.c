@@ -2,7 +2,7 @@
 #include "./utils/myUtils.h"
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
-#include "./history/history.h"
+//#include "./history/history.h"
 
 void printPrompt() {
 	printf(SHN);
@@ -38,9 +38,9 @@ int main()
 
 	else
 	{
-		int wait = 0;
+		int wait = 1;
 		if (s[strlen(s)-1] == '&') {
-			wait = 1;
+			wait = 0;
 			s[strlen(s)-1] = '\0';
 		}
 		argc = makeargs(s, &argv);

@@ -39,17 +39,56 @@ char ** parsePostPipe(char *s, int * postCount)
 
 
 void pipeIt(char ** prePipe, char ** postPipe)
-{
-	pid_t p = fork();
-	if (p) {
-		int n;
-		waitpid(p, &n, 0);
-	} else {
-		int fd[2], res, status, ret;
-		res = pipe(fd);
-		p = fork();
+{	
+	int len = 3;
+	char ** cmds[len];
+	cmds[0] = prePipe;
+	cmds[1] = postPipe;
+	makeargs("wc", &cmds[2]);
+	pid_t pid;
+	int status, ret, x, i;
+	
+	int fd[len - 1][2];
+	for (i = 0; i < len - 1; i++) {
+		pipe(fd[i]);
+	}
+	for (x = 0; x < len; x++) {
+		pid = fork();
+		if (pid == 0) {
+			// if the child
+			//printf("executing command %s\n", cmds[x][0]);
+			if (x > 0) {
+				dup2(fd[x-1][0], 0);
+			}
+			if (x < len-1) {
+				dup2(fd[x][1], 1);
+			}
+			for (i = 0; i < len - 1; i++) {
+				close(fd[i][0]);
+				close(fd[i][1]);
+				
+			}
+			if (x == len-1) {
+					printf("last command ready to execute\n");
+			}
+			//runIt(cmds[x]);
+			execvp(cmds[x][0], cmds[x]);
+			printf("execution error!\n");
+			exit(-1);
+		}
+		//if the parent
+		//printf("Waiting for fork%d, pid%d\n", x, pid);
+		//waitpid(pid, &status, 0);
+		//printf("Done waiting, next fork:\n");
+	}
 
-		if (p) {
+	//printf("Cleaning fd's\n");
+	for (i = 0; i < len - 1; i++) {
+		close(fd[i][0]);
+		close(fd[i][1]);
+	}
+
+		/*if (pid) {
 			int n;
 			waitpid(p, &n, 0);
 			close(fd[1]);
@@ -68,8 +107,7 @@ void pipeIt(char ** prePipe, char ** postPipe)
 			close(saved_stdout);
 			printf("%s: %s : command not found\n", SHN, prePipe[0]);
 			exit(ret);
-		}
-	}
+		}*/
 
 }// end pipeIt
 

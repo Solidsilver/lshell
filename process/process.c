@@ -19,6 +19,7 @@ void forkIt(char ** argv, int wait)
 }// end forkIt
 
 void runIt(char ** argv) {
+	//printf("executing command %s\n", argv[0]);
 	execvp(argv[0], argv);
 	printf("%s: %s : command not found\n", SHN, argv[0]);
 	exit(-1);

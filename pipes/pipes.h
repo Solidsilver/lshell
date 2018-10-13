@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include "../tokenize/makeArgs.h"
 #include "../utils/myUtils.h"
+#include "../process/process.h"
 
 int containsPipe(char *s);
 char ** parsePrePipe(char *s, int * preCount);

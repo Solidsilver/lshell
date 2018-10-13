@@ -7,7 +7,7 @@ FILE * openInputFile(char * fname) {
    return fin;
 }
 
-FILE * openInputFile(char * fname) {
+FILE * openOutputFile(char * fname) {
     strip(fname);
     FILE * fin = fopen(fname, "w");
     return fin;
