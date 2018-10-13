@@ -2,6 +2,7 @@
 #include "./utils/myUtils.h"
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
+#include "./history/history.h"
 
 void printPrompt() {
 	printf(SHN);

@@ -10,6 +10,9 @@
 #include "../utils/myUtils.h"
 
 void forkIt(char ** argv, int wait);
+void runIt(char ** argv);
 int isBackground(char * cmd);
+
+
 
 #endif
