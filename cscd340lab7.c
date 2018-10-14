@@ -2,6 +2,7 @@
 #include "./utils/myUtils.h"
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
+#include "./history/history.h"
 //#include "./history/history.h"
 
 void printPrompt() {
@@ -18,14 +19,23 @@ int main()
   int preCount = 0, postCount = 0;
   char ** prePipe = NULL, ** postPipe = NULL;
   char * prompt = SHN;
+
+  LinkedList * LL_hist = linkedList();
+
+  loadHistFile(".ussh_history", LL_hist);
   
   //printf("command?: ");
   printPrompt();
   fgets(s, MAX, stdin);
   strip(s);
 
+
+
   while(strcmp(s, "exit") != 0)
   {
+	if (strcmp(s, "") != 0) {
+		addToHistory(s, LL_hist);
+	}
 	pipeCount = containsPipe(s);
 	if(pipeCount > 0)
 	{
@@ -34,8 +44,10 @@ int main()
 		pipeIt(prePipe, postPipe);
 		clean(preCount, prePipe);
         clean(postCount, postPipe);
-	}// end if pipeCount	  
-
+	}// end if pipeCount
+	else if (strcmp("history", s) == 0) {
+		printHistory(LL_hist);
+	}	  
 	else
 	{
 		int wait = 1;
@@ -57,6 +69,8 @@ int main()
 	strip(s);
 
   }// end while
+  saveToFile(".ussh_history", LL_hist);
+  LL_hist = cleanLocal(LL_hist);
 
   return 0;
 

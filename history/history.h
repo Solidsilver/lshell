@@ -18,7 +18,7 @@ void addToHistory(char *, LinkedList * hist);
 void saveToFile(char * fname, LinkedList * hist);
 char * histAtIndex(int index, LinkedList * hist);
 void printHistory(LinkedList * hist);
-
+void * cleanLocal(LinkedList * hist);
 
 
 

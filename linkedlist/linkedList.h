@@ -158,4 +158,5 @@ void clearList(LinkedList * theList, void (*removeData)(void *));
  */
 void printList(const LinkedList * theList, void (*convertData)(void *));
 
+void printListFile(const LinkedList * theList, void (*convertData)(void *, FILE *), FILE * fout);
 #endif // LINKEDLIST_H
