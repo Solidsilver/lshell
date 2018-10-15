@@ -68,17 +68,13 @@ void pipeIt(char ** prePipe, char ** postPipe)
 				close(fd[i][1]);
 				
 			}
-			if (x == len-1) {
-					printf("last command ready to execute\n");
-			}
-			//runIt(cmds[x]);
-			execvp(cmds[x][0], cmds[x]);
-			printf("execution error!\n");
-			exit(-1);
+			runIt(cmds[x]);
+			//execvp(cmds[x][0], cmds[x]);
+			//exit(-1);
 		}
 		//if the parent
 		//printf("Waiting for fork%d, pid%d\n", x, pid);
-		//waitpid(pid, &status, 0);
+		//waitpid(0, &status, 0);
 		//printf("Done waiting, next fork:\n");
 	}
 

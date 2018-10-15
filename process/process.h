@@ -12,6 +12,9 @@
 void forkIt(char ** argv, int wait);
 void runIt(char ** argv);
 int isBackground(char * cmd);
+int isBuiltin(char * cmd);
+
+int runBuiltin(char ** argv);
 
 
 
