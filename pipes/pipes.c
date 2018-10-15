@@ -56,7 +56,6 @@ void pipeIt(char ** prePipe, char ** postPipe)
 		pid = fork();
 		if (pid == 0) {
 			// if the child
-			//printf("executing command %s\n", cmds[x][0]);
 			if (x > 0) {
 				dup2(fd[x-1][0], 0);
 			}
@@ -69,8 +68,6 @@ void pipeIt(char ** prePipe, char ** postPipe)
 				
 			}
 			runIt(cmds[x]);
-			//execvp(cmds[x][0], cmds[x]);
-			//exit(-1);
 		}
 		//if the parent
 		//printf("Waiting for fork%d, pid%d\n", x, pid);
@@ -83,27 +80,6 @@ void pipeIt(char ** prePipe, char ** postPipe)
 		close(fd[i][0]);
 		close(fd[i][1]);
 	}
-
-		/*if (pid) {
-			int n;
-			waitpid(p, &n, 0);
-			close(fd[1]);
-			dup2(fd[0], 0);
-			close(fd[0]);
-			ret = execvp(postPipe[0], postPipe);
-			printf("%s: %s : command not found\n", SHN, postPipe[0]);
-        	exit(ret);
-		} else {
-			close(fd[0]);
-			int saved_stdout = dup(1);
-			dup2(fd[1], 1);
-			close(fd[1]);
-			ret = execvp(prePipe[0], prePipe);
-			dup2(saved_stdout, 1);
-			close(saved_stdout);
-			printf("%s: %s : command not found\n", SHN, prePipe[0]);
-			exit(ret);
-		}*/
 
 }// end pipeIt
 

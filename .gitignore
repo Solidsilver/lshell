@@ -1,6 +1,7 @@
-#Junk
+#Junkue
 *.pdf
 .DS_Store
+.ussh_history
 
 #Build output
 *.o

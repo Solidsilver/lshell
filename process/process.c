@@ -19,7 +19,6 @@ void forkIt(char ** argv, int wait)
 }// end forkIt
 
 void runIt(char ** argv) {
-	//printf("executing command %s\n", argv[0]);
 	if (isBuiltin(argv[0]) == 1) {
 		runBuiltin(argv);
 		exit(0);

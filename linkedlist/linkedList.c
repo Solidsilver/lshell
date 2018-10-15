@@ -54,7 +54,7 @@ void printListFile(const LinkedList * theList, void (*convertData)(void *, FILE 
 			convertData(cur->data, fout);
 			cur = cur->next;
 		}
-		fprintf(fout, "\n");
+		//fprintf(fout, "\n");
 	}
 }
 
