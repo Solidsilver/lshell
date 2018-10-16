@@ -27,7 +27,6 @@ void runIt(char ** argv) {
 		fprintf(stderr, "%s: %s: command not found\n", SHN, argv[0]);
 		exit(-1);
 	}
-	
 }
 
 int isBuiltin(char * cmd) {

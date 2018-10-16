@@ -70,11 +70,11 @@ int countRecords(FILE * fin, int linesPerRecord)
 
    }// end while
 
-   if(count == 0)
+   /*if(count == 0)
    {
    		perror("count is 0");
    		exit(-99);
-   }// end if
+   }// end if*/
 
    rewind(fin);
    return count / linesPerRecord;

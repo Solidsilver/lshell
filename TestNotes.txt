@@ -1,0 +1,42 @@
+Stu's Testing File & how testing will be conducted
+1) Delete .usshrc & .ussh_history (MUST SILL RUN)
+
+Tests they run:
+    history
+    ls
+    pwd
+    ls -(opts)
+    //other basic commands
+    end with history, then exit
+    check .ussh_history to ensure commands are saved
+
+
+2) Run it again: miss .usshrc
+
+    history (should see commands read from hist);
+    //basic commands again.
+
+3) Create .usshrc with COUNT=5, FILECOUNT=10;
+    history (should only see last 5 commands);
+
+//POSSIBLE 25 POINTS so far
+
+4) recreate .usshrc with COUNT=10 and FILECOUNT=5
+ - NOTE: FILECOUNT is only for writing to file (how many of the last commands to add to file).
+         COUNT is for how many to display when running 'history'. 
+         You will load the entire file every time.
+
+    Test all commands, basically:
+    !!, |(+1), &, <, >, >>, cd, history, alias/unalias
+
+//POSSIBLE 85 so far
+
+5) Weird stuff - 10 point one-off
+ex.
+!! | wc -w
+!513 | wc - w
+./a.out < whatever.txt > helpme.txt &
+
+//POSSIBLE 95
+
+valgrind: 5 points (unless REALLY bad, +2000 bytes);

@@ -12,7 +12,9 @@ int loadHistFile(char * fname, LinkedList * hist) {
     } else {
         int total = countRecords(fin, 1);
         printf("%d records\n", total);
-        buildListTotal(hist, total, fin, buildTypeWord);
+        if (total != 0) {
+            buildListTotal(hist, total, fin, buildTypeWord);
+        }
         fclose(fin);
         return 0;
     }
@@ -43,8 +45,7 @@ void printHistory(LinkedList * hist) {
 }
 
 char * histAtIndex(int index, LinkedList * hist) {
-    Node * nix = itemAtIndex(hist, index);
-    Word * w = (Word *)(nix->data);
+    Word * w = itemAtIndex(hist, index);
     return w->ltrs;
 }
 

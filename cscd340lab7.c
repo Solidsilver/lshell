@@ -21,6 +21,9 @@ int main()
 	char **prePipe = NULL, **postPipe = NULL;
 	char *prompt = SHN;
 
+	setenv("HISTCOUNT", "1000", 1);
+	setenv("HISTFILESIZE", "2000", 1);
+
 	LinkedList *LL_hist = linkedList();
 
 	loadHistFile(".ussh_history", LL_hist);
