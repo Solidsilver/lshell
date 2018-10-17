@@ -33,7 +33,7 @@ void buildListTotal(LinkedList * myList, int total, FILE * fin, void * (*buildDa
     for (x = 0; x < total; x++) {
         nn = (Node *)calloc(1, sizeof(Node));
         nn->data = buildData(fin);
-        addFirst(myList, nn);
+        addLast(myList, nn);
     }
     //rewind(fin);
 }// end buildListTotal

@@ -31,8 +31,10 @@ fileUtils.o: ./utils/fileUtils.c ./utils/fileUtils.h
 	gcc -g -c ./utils/fileUtils.c
 
 clean:
-	rm ./pipes/pipes.o	
+	rm ./pipes/pipes.o
+	rm ./words/word.o	
 	rm ./utils/myUtils.o
+	rm ./utils/fileUtils.o
 	rm ./process/process.o
 	rm ./tokenize/makeArgs.o
 	rm ./history/history.o

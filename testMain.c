@@ -12,8 +12,10 @@ void printPrompt() {
 }
 
 int replaceString(char **s, char *target, char *replace) {
-	char *start, scpy[strlen(*s)], *token, *save;
+	char *start, scpy[strlen(*s) + 1], *token, *save;
 	int oldLen, newLen;
+	strip(target);
+	strip(replace);
 	oldLen = strlen(target);
 	newLen = strlen(replace);
 	strcpy(scpy, *s);
@@ -21,8 +23,8 @@ int replaceString(char **s, char *target, char *replace) {
 	printf("copy is %s\n", scpy);
 	//strcpy(scpy, start);
 	if (start != NULL) {
-		int newStrLen = strlen(*s) - oldLen + newLen;
-		char * newS = (char *)calloc(newStrLen, sizeof(char));
+		int newStrLen = strlen(scpy) - oldLen + newLen;
+		char * newS = (char *)calloc(newStrLen + 5, sizeof(char));
 		int x;
 		char * cur;
 		for (x = 0, cur = &(s[0][0]); strcmp(cur, start) != 0; x++, cur = &(s[0][x])) {
@@ -34,12 +36,12 @@ int replaceString(char **s, char *target, char *replace) {
 			newS[x+x2] = replace[x2];
 		}
 		for (x = x; x < strlen(*s) ; x++) {
-			newS[x+x2] = (*s)[x + oldLen]; 
+			newS[x+x2] = (*s)[x + oldLen];
 		}
 		//printf("new string %s\n", newS);
-		free(s[0]);
+		free(*s);
 		printf("I'm freee!\n");
-		s[0] = newS;
+		(*s) = newS;
 	}
 	return 0;
 
@@ -47,7 +49,7 @@ int replaceString(char **s, char *target, char *replace) {
 
 int replaceHist(char ** s, LinkedList *history) {
 	printf("Entering replaceHistory\n");
-	char *start, scpy[strlen(*s)], *token, *save, rplc[MAX];
+	char *start, scpy[strlen(*s) + 1], *token, *save, rplc[MAX];
 	int oldLen, newLen;
 	strcpy(scpy, *s);
 	start = strstr(scpy, "!");
@@ -81,11 +83,11 @@ int replaceHist(char ** s, LinkedList *history) {
 }
 
 int replaceEnvVars(char ** s) {
-	char *start, scpy[strlen(*s)], *token, *save;
+	char *start, scpy[strlen(*s) + 1], *token, *save;
 	strcpy(scpy, *s);
 	start = strstr(scpy, "$");
 	if (start != NULL) {
-		token = strtok_r(start, " ", &save);
+		token = strtok_r(start, " :\"", &save);
 		char * t = &token[1];
 		char * envRet = getenv(t);
 		if (envRet == NULL) {
@@ -125,6 +127,7 @@ int main() {
 	while (strcmp(s, "exit") != 0)
 	{
 		replaceHist(&s, LL_hist);
+		addToHistory(s, LL_hist);
 		replaceEnvVars(&s);
 		//replaceString(&s, "!!", "wow!");
 		printf("Got back from replHist, new string is %s\n", s);
@@ -147,7 +150,6 @@ int main() {
 
 
 
-		addToHistory(s, LL_hist);
 		//Go again
 		printPrompt();
 		fgets(s, MAX, stdin);
