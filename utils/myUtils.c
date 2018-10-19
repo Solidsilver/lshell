@@ -25,7 +25,7 @@ void strip(char *array)
 }// end strip
 
 int replaceString(char **s, char *target, char *replace) {
-	char *start, scpy[strlen(*s) + 1], *token, *save;
+	char *start, scpy[strlen(*s) + 1];
 	int oldLen, newLen;
 	strip(target);
 	strip(replace);
@@ -52,7 +52,7 @@ int replaceString(char **s, char *target, char *replace) {
 		}
 		free(*s);
 		//printf("I'm freee!\n");
-		(*s) = newS;
+		*s = newS;
 	}
 	return 0;
 

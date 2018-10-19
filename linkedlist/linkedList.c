@@ -28,6 +28,7 @@ void clearList(LinkedList * theList, void (*removeData)(void *))
 		}
 		//free(theList->head);
 	}
+	free(theList->head);
 	
 }// end clearList
 

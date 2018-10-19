@@ -72,6 +72,7 @@ void saveToFile(char *fname, HistList *histlist)
     char temp[MAX];
     FILE *fout = openOutputFile(fname);
     printListFile(hist, printTypeWordFile, fout);
+    fclose(fout);
 }
 
 void printHistory(HistList *histlist)
@@ -108,8 +109,8 @@ char *histAtIndex(int index, HistList *histlist)
 
 void *cleanLocal(HistList *histlist)
 {
-    LinkedList *hist = histlist->LL_hist;
-    clearList(hist, cleanTypeWord);
+    clearList(histlist->LL_hist, cleanTypeWord);
+    free(histlist->LL_hist);
     free(histlist);
     return NULL;
 }
