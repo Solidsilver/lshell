@@ -77,7 +77,7 @@ void saveToFile(char *fname, HistList *histlist)
 void printHistory(HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
-    int printCount = getenv("HISTCOUNT");
+    //int printCount = getenv("HISTCOUNT");
     if (hist->size == 0)
     {
         printf("Empty List\n");
@@ -85,11 +85,13 @@ void printHistory(HistList *histlist)
     else
     {
         Node *cur = histlist->histPrintFrom->next;
-        int x = 0;
+        int x = 1;
         while (cur != NULL)
         {
+            printf("%d\t", x);
             printTypeWord(cur->data);
             cur = cur->next;
+            x++;
         }
         printf("\n");
     }
@@ -99,7 +101,8 @@ void printHistory(HistList *histlist)
 char *histAtIndex(int index, HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
-    Word *w = itemAtIndex(hist, index);
+    Word *w = itemAtIndex(hist, index - 1);
+    //printf("WORD: %s\n", w->ltrs);
     return w->ltrs;
 }
 
@@ -133,12 +136,12 @@ int replaceHist(char **s, HistList *histlist)
             fprintf(stderr, "%s: %s: event not found\n", SHN, token);
             return (-1);
         }
-        char *histItem = histAtIndex(index, history);
+        char *histItem = histAtIndex(index, histlist);
         strcpy(rplc, histItem);
         replaceString(s, token, rplc);
 
         //free(newS);
-        return replaceHist(s, history);
+        return replaceHist(s, histlist);
     }
     return 0;
 }

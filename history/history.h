@@ -17,8 +17,8 @@ struct histlist
     LinkedList * LL_hist;
     Node * histPrintFrom;
     Node * histFileFrom;
-    int * printCount;
-    int * toFileCount;
+    int printCount;
+    int toFileCount;
 };
 typedef struct histlist HistList;
 

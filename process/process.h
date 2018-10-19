@@ -11,12 +11,12 @@
 #include "../history/history.h"
 
 
-void run(char ** argv, int wait, LinkedList * hist, LinkedList * alias);
+void run(char ** argv, int wait, HistList * hist, LinkedList * alias);
 void runIt(char ** argv);
 int isBackground(char * cmd);
 int isBuiltin(char * cmd);
 
-int runBuiltin(char ** argv, LinkedList * hist, LinkedList * alias);
+int runBuiltin(char ** argv, HistList * hist, LinkedList * alias);
 
 
 

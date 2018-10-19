@@ -1,6 +1,6 @@
 #include "process.h"
 
-void run(char **argv, int wait, LinkedList *hist, LinkedList *aliases)
+void run(char **argv, int wait, HistList *hist, LinkedList *aliases)
 {
 	if (isBuiltin(argv[0]) == 1)
 	{
@@ -58,8 +58,10 @@ int runBuiltin(char **argv, HistList *hist, LinkedList *aliases)
 		if (argv[1] == NULL)
 		{
 			fail = chdir(getenv("HOME"));
+		} else {
+			fail = chdir(argv[1]);
 		}
-		fail = chdir(argv[1]);
+		
 
 		if (fail)
 		{
