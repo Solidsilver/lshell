@@ -1,7 +1,7 @@
 all:	lab7
 
-lab7:	testMain.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./history/history.o ./linkedlist/linkedlist.o ./linkedlist/listUtils.o ./words/word.o ./utils/fileUtils.o
-	gcc -g testMain.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./history/history.o ./linkedlist/linkedlist.o ./linkedlist/listUtils.o ./words/word.o ./utils/fileUtils.o -o ussh
+lab7:	cscd340lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./history/history.o ./linkedlist/linkedlist.o ./linkedlist/listUtils.o ./words/word.o ./utils/fileUtils.o
+	gcc -g cscd340lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./history/history.o ./linkedlist/linkedlist.o ./linkedlist/listUtils.o ./words/word.o ./utils/fileUtils.o -o ussh
 
 makeArgs.o:	./tokenize/makeArgs.c ./tokenize/makeArgs.h
 	gcc -g -c ./tokenize/makeArgs.c

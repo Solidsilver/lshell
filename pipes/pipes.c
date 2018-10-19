@@ -18,33 +18,39 @@ char ** parsePrePipe(char *s, int * preCount)
 {
 	char** args;
 	char * save = NULL;
-	char cpyS[100];
+	char cpyS[strlen(s) + 1];
+	printf("PRE: scopying: %s\n", s);
 	strcpy(cpyS, s);
+	printf("PRE: tokenizing\n");
 	char * token = strtok_r(cpyS, "|", &save);
+	printf("PRE-TOKEN IS %s\n", token);
 	*preCount = makeargs(token, &args);
 	return args;
 }// end parsePrePipe
 
 
-char ** parsePostPipe(char *s, int * postCount)
+char * parsePostPipe(char *s, int * postCount)
 {
 	char** args = NULL;
 	char * save = NULL;
-	char cpyS[100];
+	char cpyS[strlen(s) + 1];
 	strcpy(cpyS, s);
+	printf("POST: copy is %s\n", cpyS);
 	char * token = strtok_r(cpyS, "|", &save);
-	*postCount = makeargs(save, &args);
-	return args;
+	printf("POST-TOKEN IS: %s\n", save);
+	printf("POST-SAVE IS: %s\n", save);
+	return save;
 }// end parsePostPipe
 
 
-void pipeIt(char ** prePipe, char ** postPipe)
+void pipeIt(char *** cmds, int count)
 {	
-	int len = 3;
-	char ** cmds[len];
-	cmds[0] = prePipe;
-	cmds[1] = postPipe;
-	makeargs("wc", &cmds[2]);
+	int len = count;
+	//char ** cmds[len];
+	//cmds[0] = prePipe;
+	//cmds[1] = postPipe;
+	//makeargs("wc", &cmds[2]);
+	printf("PIPING with %d commands\n", len);
 	pid_t pid;
 	int status, ret, x, i;
 	

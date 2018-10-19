@@ -24,35 +24,36 @@ void strip(char *array)
    
 }// end strip
 
-int menu()
-{
-   char temp[MAX];
-   int choice;
-   printf("1) Print the list\n");
-   printf("2) Add First\n");
-   printf("3) Add Last\n");
-   printf("4) Sort\n");
-   printf("5) Remove Item\n"); 
-   printf("6) Quit\n"); 
-   printf("Choice --> ");
-   fgets(temp, MAX, stdin);
-   choice = atoi(temp);
+int replaceString(char **s, char *target, char *replace) {
+	char *start, scpy[strlen(*s) + 1], *token, *save;
+	int oldLen, newLen;
+	strip(target);
+	strip(replace);
+	oldLen = strlen(target);
+	newLen = strlen(replace);
+	strcpy(scpy, *s);
+	start = strstr(scpy, target);
+	//printf("copy is %s\n", scpy);
+	//strcpy(scpy, start);
+	if (start != NULL) {
+		int newStrLen = strlen(scpy) - oldLen + newLen;
+		char * newS = (char *)calloc(newStrLen + 5, sizeof(char));
+		int x;
+		char * cur;
+		for (x = 0, cur = &(s[0][0]); strcmp(cur, start) != 0; x++, cur = &(s[0][x])) {
+			newS[x] = (*s)[x];
+		}
+		int x2;
+		for (x2 = 0; x2 < newLen; x2++) {
+			newS[x+x2] = replace[x2];
+		}
+		for (x = x; x < strlen(*s) ; x++) {
+			newS[x+x2] = (*s)[x + oldLen];
+		}
+		free(*s);
+		//printf("I'm freee!\n");
+		(*s) = newS;
+	}
+	return 0;
 
-   
-   while(choice < 1 || choice > 6)
-   {
-      printf("1) Print the list\n");
-      printf("2) Add First\n");
-      printf("3) Add Last\n");
-      printf("4) Sort\n");
-      printf("5) Remove Item\n"); 
-      printf("6) Quit\n"); 
-      printf("Choice --> ");
-      fgets(temp, MAX, stdin);
-      choice = atoi(temp);
-   
-   }// end while
-
-   return choice;
-   
-}// end menu
+}

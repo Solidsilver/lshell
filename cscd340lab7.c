@@ -13,18 +13,42 @@ void printPrompt()
 	printf("$ ");
 }
 
+int replaceEnvVars(char **s)
+{
+	char *start, scpy[strlen(*s) + 1], *token, *save;
+	strcpy(scpy, *s);
+	start = strstr(scpy, "$");
+	if (start != NULL)
+	{
+		token = strtok_r(start, " :\"", &save);
+		char *t = &token[1];
+		char *envRet = getenv(t);
+		if (envRet == NULL)
+		{
+			envRet = "";
+		}
+		replaceString(s, token, envRet);
+		replaceEnvVars(s);
+	}
+	return 0;
+}
+
 int main()
 {
 	int argc, pipeCount;
-	char **argv = NULL, s[MAX];
+	char **argv = NULL, *s;
 	int preCount = 0, postCount = 0;
 	char **prePipe = NULL, **postPipe = NULL;
 	char *prompt = SHN;
+	
+
+	s = (char *)calloc(1000, sizeof(char));
 
 	setenv("HISTCOUNT", "1000", 1);
 	setenv("HISTFILESIZE", "2000", 1);
 
-	LinkedList *LL_hist = linkedList();
+	HistList *LL_hist = histList();
+	LinkedList *LL_alias = linkedList();
 
 	loadHistFile(".ussh_history", LL_hist);
 
@@ -35,58 +59,52 @@ int main()
 
 	while (strcmp(s, "exit") != 0)
 	{
-		int wait = 1;
-		if (s[strlen(s) - 1] == '&')
+		if (replaceHist(&s, LL_hist) == 0)
 		{
-			wait = 0;
-			s[strlen(s) - 1] = '\0';
-		}
-		pid_t p = 0;
-		if (wait == 0)
-		{
-			p = fork();
-		}
-		if (p == 0)
-		{
-			if (strcmp(s, "") != 0)
+			addToHistory(s, LL_hist);
+			replaceEnvVars(&s);
+			int wait = 1;
+			if (s[strlen(s) - 1] == '&')
 			{
-				addToHistory(s, LL_hist);
+				wait = 0;
+				s[strlen(s) - 1] = '\0';
 			}
-			pipeCount = containsPipe(s);
-			if (pipeCount > 0)
+			pid_t p = 0;
+			if (wait == 0)
 			{
-				prePipe = parsePrePipe(s, &preCount);
-				postPipe = parsePostPipe(s, &postCount);
-				pipeIt(prePipe, postPipe);
-				clean(preCount, prePipe);
-				clean(postCount, postPipe);
-			} // end if pipeCount
-			else if (strcmp("history", s) == 0)
-			{
-				printHistory(LL_hist);
+				p = fork();
 			}
-			else
+			if (p == 0)
 			{
-				argc = makeargs(s, &argv);
-				if (argc != -1)
-					forkIt(argv, 1);
+				if (strcmp("history", s) == 0)
+				{
+					printHistory(LL_hist);
+				}
+				else
+				{
+					argc = makeargs(s, &argv);
+					if (argc != -1)
+						run(argv, 1, LL_hist, LL_alias);
 
-				clean(argc, argv);
-				argv = NULL;
+					clean(argc, argv);
+					argv = NULL;
+				}
+				if (wait == 0)
+				{
+					exit(0);
+				}
 			}
-			if (wait == 0) {
-				exit(0);
-			}
-		}
 
-		//printf("command?: ");
-		printPrompt();
-		fgets(s, MAX, stdin);
-		strip(s);
+			//printf("command?: ");
+			printPrompt();
+			fgets(s, MAX, stdin);
+			strip(s);
+		}
 
 	} // end while
 	saveToFile(".ussh_history", LL_hist);
 	LL_hist = cleanLocal(LL_hist);
+	free(s);
 
 	return 0;
 

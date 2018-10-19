@@ -48,6 +48,15 @@ struct linkedlist
 };
 typedef struct linkedlist LinkedList;
 
+/*struct histlist
+{
+    Node * head;
+    Node * printFrom;
+    Node * fileCount;
+    int size;
+};
+typedef struct histlist HistList; 
+*/
 /**
  * @brief The so called "constructor" for the linked list
  *

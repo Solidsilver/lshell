@@ -12,13 +12,25 @@
 #include "../utils/fileUtils.h"
 #include "../linkedlist/requiredIncludes.h"
 
+struct histlist
+{
+    LinkedList * LL_hist;
+    Node * histPrintFrom;
+    Node * histFileFrom;
+    int * printCount;
+    int * toFileCount;
+};
+typedef struct histlist HistList;
 
-int loadHistFile(char * fname, LinkedList * hist);
-void addToHistory(char *, LinkedList * hist);
-void saveToFile(char * fname, LinkedList * hist);
-char * histAtIndex(int index, LinkedList * hist);
-void printHistory(LinkedList * hist);
-void * cleanLocal(LinkedList * hist);
+HistList * histList();
+
+int loadHistFile(char * fname, HistList * hist);
+void addToHistory(char *, HistList * hist);
+void saveToFile(char * fname, HistList * hist);
+char * histAtIndex(int index, HistList * hist);
+void printHistory(HistList * hist);
+void * cleanLocal(HistList * hist);
+int replaceHist(char ** s, HistList * hist);
 
 
 
