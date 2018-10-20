@@ -179,6 +179,7 @@ void * itemAtIndex(LinkedList * theList, int index) {
 	if (index >= theList->size) {
 		return NULL;
 	} else {
+		printf("linkedlist.c:182: getting index %d\n", index);
 		Node * cur = theList->head->next;
 		int x;
 		for (x = 0; x < index; x++) {

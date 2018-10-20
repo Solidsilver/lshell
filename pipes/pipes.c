@@ -5,87 +5,86 @@ int containsPipe(char *s)
 	int len = strlen(s);
 	int count = 0;
 	int x;
-	for (x = 0; x < len; x++) {
-		if (s[x] == '|') {
+	for (x = 0; x < len; x++)
+	{
+		if (s[x] == '|')
+		{
 			count += 1;
 		}
 	}
 	return count;
-}// end containsPipe
+} // end containsPipe
 
-
-char ** parsePrePipe(char *s, int * preCount)
+char ***parsePipe(char *s, int pipeCount)
 {
-	char** args;
+	char ***pipes = (char***)calloc(pipeCount + 1, sizeof(char**));
+	char ** argv;
+	char next[100];
+	strcpy(next, s);
 	char * save = NULL;
-	char cpyS[strlen(s) + 1];
-	printf("PRE: scopying: %s\n", s);
-	strcpy(cpyS, s);
-	printf("PRE: tokenizing\n");
-	char * token = strtok_r(cpyS, "|", &save);
-	printf("PRE-TOKEN IS %s\n", token);
-	*preCount = makeargs(token, &args);
-	return args;
-}// end parsePrePipe
-
-
-char * parsePostPipe(char *s, int * postCount)
-{
-	char** args = NULL;
-	char * save = NULL;
-	char cpyS[strlen(s) + 1];
-	strcpy(cpyS, s);
-	printf("POST: copy is %s\n", cpyS);
-	char * token = strtok_r(cpyS, "|", &save);
-	printf("POST-TOKEN IS: %s\n", save);
-	printf("POST-SAVE IS: %s\n", save);
-	return save;
-}// end parsePostPipe
-
-
-void pipeIt(char *** cmds, int count)
-{	
-	int len = count;
-	//char ** cmds[len];
-	//cmds[0] = prePipe;
-	//cmds[1] = postPipe;
-	//makeargs("wc", &cmds[2]);
-	printf("PIPING with %d commands\n", len);
-	pid_t pid;
-	int status, ret, x, i;
-	
-	int fd[len - 1][2];
-	for (i = 0; i < len - 1; i++) {
-		pipe(fd[i]);
+	int x = 0;
+	while (containsPipe(next))
+	{
+		char nextCpy[100];
+		strcpy(nextCpy, next);
+		makeargs(strtok_r(nextCpy, "|", &save), &argv);
+		strcpy(next, save);
+		pipes[x] = argv;
+		//printf("pipes:64: pipes at %d is %s\n", x, pipes[x][0]);
+		x++;
 	}
-	for (x = 0; x < len; x++) {
+	makeargs(next, &argv);
+	pipes[x] = argv;
+	//printf("pipes:64: pipes at %d is %s\n", x, pipes[x][0]);
+	return pipes;
+}
+
+void pipeIt(char ***cmds, int len)
+{
+	//int len = count;
+	pid_t pid;
+	int status, x, fd[2], fd2[2];
+	pipe(fd);
+	pipe(fd2);
+	for (x = 0; x < len; x++)
+	{
 		pid = fork();
-		if (pid == 0) {
+		if (pid == 0)
+		{
 			// if the child
-			if (x > 0) {
-				dup2(fd[x-1][0], 0);
+			if (x > 0)
+			{
+				if (x % 2 == 0)
+				{
+					dup2(fd[0], 0);
+				}
+				else
+				{
+					dup2(fd2[0], 0);
+				}
 			}
-			if (x < len-1) {
-				dup2(fd[x][1], 1);
+			if (x < len - 1)
+			{
+				if (x % 2 == 0)
+				{
+					dup2(fd2[1], 1);
+				}
+				else
+				{
+					dup2(fd[1], 1);
+				}
 			}
-			for (i = 0; i < len - 1; i++) {
-				close(fd[i][0]);
-				close(fd[i][1]);
-				
-			}
+			close(fd[0]);
+			close(fd[1]);
+			close(fd2[0]);
+			close(fd2[1]);
 			runIt(cmds[x]);
 		}
-		//if the parent
-		//printf("Waiting for fork%d, pid%d\n", x, pid);
-		//waitpid(0, &status, 0);
-		//printf("Done waiting, next fork:\n");
+		//parent goes again
 	}
-
-	//printf("Cleaning fd's\n");
-	for (i = 0; i < len - 1; i++) {
-		close(fd[i][0]);
-		close(fd[i][1]);
-	}
-
-}// end pipeIt
-
+	close(fd[0]);
+	close(fd[1]);
+	close(fd2[0]);
+	close(fd2[1]);
+	waitpid(pid, &status, 0);
+} // end pipeIt

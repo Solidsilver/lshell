@@ -11,7 +11,7 @@
 
 
 void clean(int argc, char **argv);
-void printargs(int argc, char **argv);
+void printargs(char **argv);
 int makeargs(char *s, char *** argv);
 
 #endif

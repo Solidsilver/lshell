@@ -83,7 +83,7 @@ int main()
 	char *s;
 	char *prompt = SHN;
 
-	s = (char *)calloc(100, sizeof(char));
+	s = (char *)calloc(1000, sizeof(char));
 
 	setenv("HISTCOUNT", "1000", 1);
 	setenv("HISTFILESIZE", "2000", 1);
@@ -100,7 +100,18 @@ int main()
 
 	while (strcmp(s, "exit") != 0)
 	{
-		runCommand(s, LL_hist, LL_alias);
+		int pipeCount = containsPipe(s);
+		if (pipeCount > 0)
+		{
+			char ***pipes = parsePipe(s, pipeCount);
+			int x = 0;
+			pipeIt(pipes, pipeCount + 1);
+			free(pipes);
+
+		} else {
+			runCommand(s, LL_hist, LL_alias);
+		}
+		
 		printPrompt();
 		//free(s);
 		//s = (char *)calloc(1000, sizeof(char));

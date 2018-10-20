@@ -25,18 +25,13 @@ void strip(char *array)
 }// end strip
 
 int replaceString(char **s, char *target, char *replace) {
-	char *start, scpy[strlen(*s) + 1];
-	int oldLen, newLen;
-	strip(target);
-	strip(replace);
-	oldLen = strlen(target);
-	newLen = strlen(replace);
-	strcpy(scpy, *s);
-	start = strstr(scpy, target);
-	//printf("copy is %s\n", scpy);
-	//strcpy(scpy, start);
+	char *start;
+	int targetLen, replaceLen;
+	targetLen = strlen(target);
+	replaceLen = strlen(replace);
+	start = strstr(*s, target);
 	if (start != NULL) {
-		int newStrLen = strlen(scpy) - oldLen + newLen;
+		int newStrLen = strlen(*s) - targetLen + replaceLen;
 		char * newS = (char *)calloc(newStrLen + 5, sizeof(char));
 		int x;
 		char * cur;
@@ -44,11 +39,11 @@ int replaceString(char **s, char *target, char *replace) {
 			newS[x] = (*s)[x];
 		}
 		int x2;
-		for (x2 = 0; x2 < newLen; x2++) {
+		for (x2 = 0; x2 < replaceLen; x2++) {
 			newS[x+x2] = replace[x2];
 		}
 		for (x = x; x < strlen(*s) ; x++) {
-			newS[x+x2] = (*s)[x + oldLen];
+			newS[x+x2] = s[0][x + targetLen];
 		}
 		free(*s);
 		//printf("I'm freee!\n");

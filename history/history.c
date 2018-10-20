@@ -102,7 +102,7 @@ void printHistory(HistList *histlist)
 char *histAtIndex(int index, HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
-    Word *w = itemAtIndex(hist, index - 1);
+    Word *w = itemAtIndex(hist, index);
     //printf("WORD: %s\n", w->ltrs);
     return w->ltrs;
 }
@@ -126,7 +126,7 @@ int replaceHist(char **s, HistList *histlist)
     {
         token = strtok_r(start, " ", &save);
         oldLen = strlen(token);
-        int index = 0;
+        int index = -1;
         if (token[1] != '!')
         {
             char *t = &token[1];

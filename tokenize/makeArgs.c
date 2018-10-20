@@ -13,11 +13,17 @@ void clean(int argc, char **argv)
 	argv = NULL;
 }// end clean
 
-void printargs(int argc, char **argv)
+void printargs(char **argv)
 {
-	int x;
+	int x = 0;
+	/*
 	for(x = 0; x < argc; x++)
-		printf("%s\n", argv[x]);
+		printf("%s\n", argv[x]);*/
+	while (argv[x] != NULL) {
+		fprintf(stderr, "'%s' ", argv[x]);
+		x++;
+	}
+	fprintf(stderr, "\n");
 
 }// end printargs
 
@@ -35,12 +41,14 @@ int makeargs(char *s, char *** argv)
 	{
 		count ++;
 		token = strtok_r(NULL, " ", &saveptr);
+		//printf("got token %s\n", token);
 	}
 
 	if(count == 0)
 		return -1;
 
 	(*argv) = (char **)calloc(count + 1, sizeof(char *));
+	//printf("Count: %d\n", count);
 	
 	token = strtok_r(s, " ", &saveptr);
 	(*argv)[0] = (char *)calloc(strlen(token) + 1, sizeof(char));

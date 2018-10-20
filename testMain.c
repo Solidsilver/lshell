@@ -12,13 +12,11 @@ void printPrompt()
 	printf("$ ");
 }
 
-
-
 int main()
 {
 
 	int argc, pipeCount;
-	char **argv = NULL, s[MAX];
+	char **argv = NULL;
 	int preCount = 0, postCount = 0;
 	char **prePipe = NULL, **postPipe = NULL;
 	char *prompt = SHN;
@@ -26,56 +24,41 @@ int main()
 	int wait;
 	char *s = (char *)calloc(1000, sizeof(char));
 	pid_t pid;
-	LinkedList *LL_hist, *LL_alias;
-
-	//setup
-	LL_hist = linkedList();
-	//LL_alias = linkedList();
-	loadHistFile(".ussh_history", LL_hist);
-
-	setenv("HISTCOUNT", "1000", 1);
-	setenv("HISTFILESIZE", "2000", 1);
 
 	//Start getting input
+	char **pipCmds[2];
+	s = (char *)calloc(1000, sizeof(char));
+	//printf("command?: ");
 	printPrompt();
-
 	fgets(s, MAX, stdin);
-
 	strip(s);
 
+	int x = 0;
 	while (strcmp(s, "exit") != 0)
 	{
-		pipeCount = containsPipe(s);
+		int pipeCount = containsPipe(s);
 		if (pipeCount > 0)
 		{
-			char **pipes[pipeCount + 1];
-			char *next = s;
+			char ***pipes = parsePipe(s, pipeCount);
 			int x = 0;
-			while (next != NULL)
-			{
-				printf("1) next is %s\n", next);
-				pipes[x] = parsePrePipe(next, &preCount);
-				printf("2) saved %s\n", pipes[x][0]);
-				next = parsePostPipe(next, &postCount);
-				printf("3) next-next is %s\n", next);
-				x++;
-			}
 			pipeIt(pipes, x);
-			//clean(preCount, prePipe);
-			//clean(postCount, postPipe);
-		} // end if pipeCount
+			free(pipes);
 
-		//Go again
+		} // end if pipeCount
+		else
+		{
+			
+		}
+
 		printPrompt();
 		fgets(s, MAX, stdin);
 		strip(s);
-	}
-	//printf("exiting while\n");
-	saveToFile(".ussh_history", LL_hist);
+		x++;
 
-	//cleanup
-	//NEED TO FREE LL_alias!!!!!!
-	LL_hist = cleanLocal(LL_hist);
+	} // end while*/
+
+	//pipeIt(pipCmds, 2);
+
 	free(s);
 
 	printf("exit\n");

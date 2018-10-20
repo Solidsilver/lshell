@@ -13,9 +13,10 @@
 #include "../process/process.h"
 
 int containsPipe(char *s);
-char ** parsePrePipe(char *s, int * preCount);
+char ** parsePrePipe(char **s);
 char * parsePostPipe(char *s, int * postCount);
 void pipeIt(char *** cmds, int count);
+char *** parsePipe(char * s, int pipeCount);
 
 
 #endif 
