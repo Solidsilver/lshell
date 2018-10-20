@@ -33,17 +33,43 @@ int replaceEnvVars(char **s)
 	return 0;
 }
 
-void runCommand(char *s, HistList *LL_hist, LinkedList *LL_alias)
+int hasAlias(char *in)
 {
+	//int ret = 0;
+	char *start;
+	start = strstr(in, "alias");
+	if (start != NULL)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int strhasstr(char *containing, char *in)
+{
+	char *start;
+	start = strstr(in, in);
+	if (start != NULL)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
+{
+	char *s = *strin;
 	int argc, pipeCount;
 	char **argv = NULL;
 	int preCount = 0, postCount = 0;
 	char **prePipe = NULL, **postPipe = NULL;
 
-	if (replaceHist(&s, LL_hist) == 0)
+	if (replaceHist(strin, LL_hist) == 0)
 	{
+		s = *strin;
 		addToHistory(s, LL_hist);
-		replaceEnvVars(&s);
+		replaceEnvVars(strin);
+		s = *strin;
 		int wait = 1;
 		if (s[strlen(s) - 1] == '&')
 		{
@@ -57,9 +83,17 @@ void runCommand(char *s, HistList *LL_hist, LinkedList *LL_alias)
 		}
 		if (p == 0)
 		{
-			if (strcmp("history", s) == 0)
+			int pipeCount = containsPipe(s);
+			if (pipeCount > 0)
 			{
-				printHistory(LL_hist);
+				char ***pipes = parsePipe(s, pipeCount);
+				int x = 0;
+				pipeIt(pipes, pipeCount);
+				free(pipes);
+			}
+			else if (strhasstr(s, "alias"))
+			{
+				
 			}
 			else
 			{
@@ -69,10 +103,10 @@ void runCommand(char *s, HistList *LL_hist, LinkedList *LL_alias)
 
 				clean(argc, argv);
 				argv = NULL;
-			}
-			if (wait == 0)
-			{
-				exit(0);
+				if (wait == 0)
+				{
+					exit(0);
+				}
 			}
 		}
 	}
@@ -93,6 +127,22 @@ int main()
 
 	loadHistFile(".ussh_history", LL_hist);
 
+	FILE *fin = openInputFile(".usshrc");
+	if (fin != NULL)
+	{
+		int count = countRecords(fin, 1);
+		int x;
+		for (x = 0; x < count; x++)
+		{
+			fgets(s, MAX, fin);
+			strip(s);
+			if (strcmp("", s) != 0)
+			{
+				runCommand(&s, LL_hist, LL_alias);
+			}
+		}
+	}
+
 	//printf("command?: ");
 	printPrompt();
 	fgets(s, MAX, stdin);
@@ -100,21 +150,13 @@ int main()
 
 	while (strcmp(s, "exit") != 0)
 	{
-		int pipeCount = containsPipe(s);
-		if (pipeCount > 0)
+		if (strcmp(s, "") != 0)
 		{
-			char ***pipes = parsePipe(s, pipeCount);
-			int x = 0;
-			pipeIt(pipes, pipeCount + 1);
-			free(pipes);
-
-		} else {
-			runCommand(s, LL_hist, LL_alias);
+			runCommand(&s, LL_hist, LL_alias);
 		}
-		
+		free(s);
+		s = (char *)calloc(1000, sizeof(char));
 		printPrompt();
-		//free(s);
-		//s = (char *)calloc(1000, sizeof(char));
 		fgets(s, MAX, stdin);
 		strip(s);
 
@@ -123,7 +165,7 @@ int main()
 	LL_hist = cleanLocal(LL_hist);
 	clearList(LL_alias, cleanTypeWord);
 	free(LL_alias);
-	
+
 	free(s);
 
 	return 0;

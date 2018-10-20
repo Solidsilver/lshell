@@ -22,13 +22,13 @@ int loadHistFile(char *fname, HistList *histlist)
     FILE *fin = openInputFile(fname);
     if (fin == NULL)
     {
-        printf("history file does not exist\n");
+        //printf("history file does not exist\n");
         return 0;
     }
     else
     {
         int total = countRecords(fin, 1);
-        printf("%d records\n", total);
+        //printf("%d records\n", total);
         if (total != 0)
         {
             if (hist == NULL)
@@ -69,7 +69,6 @@ void addToHistory(char *cmd, HistList *histlist)
 void saveToFile(char *fname, HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
-    char temp[MAX];
     FILE *fout = openOutputFile(fname);
     printListFile(hist, printTypeWordFile, fout);
     fclose(fout);
@@ -102,7 +101,7 @@ void printHistory(HistList *histlist)
 char *histAtIndex(int index, HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
-    Word *w = itemAtIndex(hist, index);
+    Word *w = (Word *)itemAtIndex(hist, index);
     //printf("WORD: %s\n", w->ltrs);
     return w->ltrs;
 }
@@ -118,7 +117,7 @@ void *cleanLocal(HistList *histlist)
 int replaceHist(char **s, HistList *histlist)
 {
     LinkedList *history = histlist->LL_hist;
-    char *start, scpy[strlen(*s) + 1], *token, *save, rplc[MAX];
+    char *start, scpy[strlen(*s) + 1], *token, *save, rplc[1000];
     int oldLen, newLen;
     strcpy(scpy, *s);
     start = strstr(scpy, "!");
@@ -126,11 +125,12 @@ int replaceHist(char **s, HistList *histlist)
     {
         token = strtok_r(start, " ", &save);
         oldLen = strlen(token);
-        int index = -1;
+        int index = history->size - 1;
         if (token[1] != '!')
         {
             char *t = &token[1];
             index = atoi(t);
+            index = index - 1;
         }
         if (index >= history->size)
         {

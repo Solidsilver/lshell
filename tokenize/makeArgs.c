@@ -29,7 +29,7 @@ void printargs(char **argv)
 
 int makeargs(char *s, char *** argv)
 {
-	char copy[MAX];
+	char copy[strlen(s) + 1];
 	strcpy(copy, s);
 
 	int count = 0;

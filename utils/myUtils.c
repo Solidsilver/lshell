@@ -32,7 +32,7 @@ int replaceString(char **s, char *target, char *replace) {
 	start = strstr(*s, target);
 	if (start != NULL) {
 		int newStrLen = strlen(*s) - targetLen + replaceLen;
-		char * newS = (char *)calloc(newStrLen + 5, sizeof(char));
+		char * newS = (char *)calloc(1000, sizeof(char));
 		int x;
 		char * cur;
 		for (x = 0, cur = &(s[0][0]); strcmp(cur, start) != 0; x++, cur = &(s[0][x])) {
@@ -45,6 +45,7 @@ int replaceString(char **s, char *target, char *replace) {
 		for (x = x; x < strlen(*s) ; x++) {
 			newS[x+x2] = s[0][x + targetLen];
 		}
+		newS[x+x2+1] = '\0';
 		free(*s);
 		//printf("I'm freee!\n");
 		*s = newS;
