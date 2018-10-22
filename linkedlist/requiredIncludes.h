@@ -11,5 +11,6 @@
 
 #include "../myInt/myInt.h"
 #include "../words/word.h"
+#include "../words/alias.h"
 
 #endif /* REQUIREDINCLUDES_H */

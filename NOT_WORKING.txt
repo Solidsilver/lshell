@@ -1,0 +1,4 @@
+File redirection does not work.
+Alias integration is spotty. 
+
+Sorry :(

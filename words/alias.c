@@ -19,12 +19,14 @@ void printTypeAliasFile(void * passedIn, FILE * fout) {
 void * buildTypeAliasStr(char * name, char * value) {
     strip(name);
     strip(value);
+    //printf("Got in: Name: %s, Value %s\n", name, value);
     Alias * a1 = (Alias *)calloc(1, sizeof(Alias));
     //a1->len = strlen(str);
     a1->name = (char *)calloc(strlen(name)+1, sizeof(char));
     a1->value = (char *)calloc(strlen(value)+1, sizeof(char));
     strcpy(a1->name, name);
     strcpy(a1->value, value);
+    //printf("going out: Name: %s, Value %s\n", a1->name, a1->value);
     return a1;
 }
 

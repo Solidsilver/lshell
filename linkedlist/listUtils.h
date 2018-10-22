@@ -40,6 +40,7 @@
 Node * buildNode(FILE * fin, void *(*buildData)(FILE * in) );
 
 Node * buildNode_Str(char * in, void *(*buildData)(char * in));
+Node * buildNode_Str2(char * in1, char * in2, void *(*buildData2)(char * in1, char * in2));
 
 
 /**

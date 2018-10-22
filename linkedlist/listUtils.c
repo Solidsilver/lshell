@@ -9,6 +9,10 @@ Node * buildNode_Str(char * in, void *(*buildData)(char * in)) {
     return buildNode_Type(buildData(in));
 }
 
+Node * buildNode_Str2(char * first, char * second, void *(*buildData2)(char * in, char * in2)) {
+    return buildNode_Type(buildData2(first, second));
+}
+
 Node * buildNode_Type(void * passedIn)
 {
     if (passedIn == NULL) {

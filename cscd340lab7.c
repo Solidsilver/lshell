@@ -47,12 +47,14 @@ int hasAlias(char *in)
 
 int strhasstr(char *containing, char *in)
 {
-	char *start;
-	start = strstr(in, in);
+	char *start = NULL;
+	start = strstr(containing, in);
 	if (start != NULL)
 	{
+		//printf("returning 1\n");
 		return 1;
 	}
+	//printf("returning 0\n");
 	return 0;
 }
 
@@ -93,7 +95,38 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 			}
 			else if (strhasstr(s, "alias"))
 			{
-				
+				char *save;
+				char sCopy[1000];
+				strcpy(sCopy, s);
+				strtok_r(sCopy, " ", &save);
+				if (strcmp(s,"alias") == 0)
+				{
+					printList(LL_alias, printTypeAlias);
+				}
+				else
+				{
+					char *name;
+					char *value;
+					char nm[100], vl[100];
+					name = strtok_r(NULL, "=", &save);
+					strcpy(nm, name);
+					save += 1;
+					value = strtok_r(NULL, "'", &save);
+					strcpy(vl, value);
+					//printf("Name: %s, Value: %s\n", nm, vl);
+					Node * nn;
+					nn = buildNode_Str2(name, value, buildTypeAliasStr);
+					//printTypeAlias(nn->data);
+					addFirst(LL_alias, nn);
+				}
+			}
+			else if (strhasstr(s, "=")) {
+				char * save, * varName;
+				char sCopy[1000];
+				strcpy(sCopy, s);
+				varName = strtok_r(sCopy, "=", &save);
+				//printf("Setting env: %s to value: %s", varName, save);
+				setenv(varName, save, 1);
 			}
 			else
 			{
@@ -120,12 +153,10 @@ int main()
 	s = (char *)calloc(1000, sizeof(char));
 
 	setenv("HISTCOUNT", "1000", 1);
-	setenv("HISTFILESIZE", "2000", 1);
+	setenv("HISTFILECOUNT", "2000", 1);
 
 	HistList *LL_hist = histList();
 	LinkedList *LL_alias = linkedList();
-
-	loadHistFile(".ussh_history", LL_hist);
 
 	FILE *fin = openInputFile(".usshrc");
 	if (fin != NULL)
@@ -142,6 +173,9 @@ int main()
 			}
 		}
 	}
+	cleanLocal(LL_hist);
+	LL_hist = histList();
+	loadHistFile(".ussh_history", LL_hist);
 
 	//printf("command?: ");
 	printPrompt();

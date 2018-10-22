@@ -7,7 +7,7 @@ HistList *histList()
     hl->histPrintFrom = hl->LL_hist->head;
     hl->histFileFrom = hl->LL_hist->head;
     hl->printCount = atoi(getenv("HISTCOUNT"));
-    hl->toFileCount = atoi(getenv("HISTFILESIZE"));
+    hl->toFileCount = atoi(getenv("HISTFILECOUNT"));
     return hl;
 }
 
@@ -64,13 +64,31 @@ void addToHistory(char *cmd, HistList *histlist)
     {
         histlist->histPrintFrom = histlist->histPrintFrom->next;
     }
+    if (hist->size > histlist->toFileCount)
+    {
+        histlist->histFileFrom = histlist->histFileFrom->next;
+    }
 }
 
 void saveToFile(char *fname, HistList *histlist)
 {
     LinkedList *hist = histlist->LL_hist;
     FILE *fout = openOutputFile(fname);
-    printListFile(hist, printTypeWordFile, fout);
+    if (hist->size == 0)
+    {
+        //fprintf(fout, "Empty List\n");
+    }
+    else
+    {
+        Node *cur = histlist->histFileFrom->next;
+        while (cur != NULL)
+        {
+            printTypeWordFile(cur->data, fout);
+            cur = cur->next;
+        }
+        //fprintf(fout, "\n");
+    }
+    //printListFile(hist, printTypeWordFile, fout);
     fclose(fout);
 }
 
