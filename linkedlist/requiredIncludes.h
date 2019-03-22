@@ -9,8 +9,9 @@
 #ifndef REQUIREDINCLUDES_H
 #define REQUIREDINCLUDES_H
 
-#include "../myInt/myInt.h"
-#include "../words/word.h"
-#include "../words/alias.h"
+#include "../types/myInt.h"
+#include "../types/word.h"
+#include "../types/alias.h"
+#include "../types/string.h"
 
 #endif /* REQUIREDINCLUDES_H */
