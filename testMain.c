@@ -37,6 +37,7 @@ int main()
 	while (strcmp(s, "exit") != 0)
 	{
 		int pipeCount = containsPipe(s);
+		printf("got pipecount %d\n", pipeCount);
 		if (pipeCount > 0)
 		{
 			char ***pipes = parsePipe(s, pipeCount);

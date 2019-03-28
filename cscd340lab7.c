@@ -9,7 +9,7 @@ void printPrompt()
 {
 	printf(SHN);
 	printf("-");
-	printf("%.2f", VER);
+	printf("%.1f", VER);
 	printf("$ ");
 }
 

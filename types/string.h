@@ -106,7 +106,7 @@ void * buildTypeString_Prompt();
  * @warning - The passed in void * p1 is checked - exit(-99) if NULL
  * @warning - The passed in void * p2 is checked - exit(-99) if NULL
  */
-int compareString(const void * p1, const void * p2);
+int compareStrings(const void * p1, const void * p2);
 
 
 

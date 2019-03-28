@@ -2,6 +2,7 @@
 
 int containsPipe(char *s)
 {
+	//printf("counting pipes in %s\n", s);
 	int len = strlen(s);
 	int count = 0;
 	int x;
@@ -12,6 +13,7 @@ int containsPipe(char *s)
 			count += 1;
 		}
 	}
+	//printf("Returning pipeCount: %d\n", count);
 	return count;
 } // end containsPipe
 
