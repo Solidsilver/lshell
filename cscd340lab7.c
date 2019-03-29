@@ -58,7 +58,7 @@ int strhasstr(char *containing, char *in)
 	return 0;
 }
 
-void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
+void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias, int *backgnd)
 {
 	char *s = *strin;
 	int argc, pipeCount;
@@ -81,7 +81,9 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 		pid_t p = 0;
 		if (wait == 0)
 		{
+			//*backgnd = (*backgnd) + 1;
 			p = fork();
+			*backgnd = (*backgnd) + 1;
 		}
 		if (p == 0)
 		{
@@ -91,7 +93,7 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 				char ***pipes = parsePipe(s, pipeCount);
 				int x = 0;
 				pipeIt(pipes, pipeCount);
-				free(pipes);
+				freePipes(pipes, pipeCount + 1);
 			}
 			else if (strhasstr(s, "alias"))
 			{
@@ -99,7 +101,7 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 				char sCopy[1000];
 				strcpy(sCopy, s);
 				strtok_r(sCopy, " ", &save);
-				if (strcmp(s,"alias") == 0)
+				if (strcmp(s, "alias") == 0)
 				{
 					printList(LL_alias, printTypeAlias);
 				}
@@ -114,14 +116,15 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 					value = strtok_r(NULL, "'", &save);
 					strcpy(vl, value);
 					//printf("Name: %s, Value: %s\n", nm, vl);
-					Node * nn;
+					Node *nn;
 					nn = buildNode_Str2(name, value, buildTypeAliasStr);
 					//printTypeAlias(nn->data);
 					addFirst(LL_alias, nn);
 				}
 			}
-			else if (strhasstr(s, "=")) {
-				char * save, * varName;
+			else if (strhasstr(s, "="))
+			{
+				char *save, *varName;
 				char sCopy[1000];
 				strcpy(sCopy, s);
 				varName = strtok_r(sCopy, "=", &save);
@@ -136,11 +139,15 @@ void runCommand(char **strin, HistList *LL_hist, LinkedList *LL_alias)
 
 				clean(argc, argv);
 				argv = NULL;
-				if (wait == 0)
-				{
-					exit(0);
-				}
 			}
+			if (wait == 0)
+			{
+				printf("\n[%d]+  Done                    %s\n", *backgnd, s);
+				*backgnd = (*backgnd) - 1;
+				exit(0);
+			}
+		} else {
+			printf("[%d] %d\n", *backgnd, p);
 		}
 	}
 }
@@ -151,6 +158,7 @@ int main()
 	char *prompt = SHN;
 
 	s = (char *)calloc(1000, sizeof(char));
+	int *backgnd = (int*)calloc(1, sizeof(int32_t));
 
 	setenv("HISTCOUNT", "1000", 1);
 	setenv("HISTFILECOUNT", "2000", 1);
@@ -169,7 +177,7 @@ int main()
 			strip(s);
 			if (strcmp("", s) != 0)
 			{
-				runCommand(&s, LL_hist, LL_alias);
+				runCommand(&s, LL_hist, LL_alias, backgnd);
 			}
 		}
 	}
@@ -181,12 +189,12 @@ int main()
 	printPrompt();
 	fgets(s, MAX, stdin);
 	strip(s);
-
+	*backgnd = 0;
 	while (strcmp(s, "exit") != 0)
 	{
 		if (strcmp(s, "") != 0)
 		{
-			runCommand(&s, LL_hist, LL_alias);
+			runCommand(&s, LL_hist, LL_alias, backgnd);
 		}
 		free(s);
 		s = (char *)calloc(1000, sizeof(char));
@@ -201,6 +209,7 @@ int main()
 	free(LL_alias);
 
 	free(s);
+	free(backgnd);
 
 	return 0;
 

@@ -26,7 +26,7 @@ int main()
 	pCount = containsPipe(s);
 
 	toPipe = parsePipe(s, pCount);
-	pipeIt(toPipe, pCount + 1);
+	pipeIt(toPipe, pCount);
 
 	freePipes(toPipe, pCount + 1);
 	free(s);

@@ -41,9 +41,9 @@ char ***parsePipe(char *s, int pipeCount)
 	return pipes;
 }
 
-void pipeIt(char ***cmds, int len)
+void pipeIt(char ***cmds, int count)
 {
-	//int len = count;
+	int len = count+1;
 	pid_t pid;
 	int status, x, fd[2], fd2[2];
 	pipe(fd);
