@@ -19,11 +19,11 @@ int containsPipe(char *s)
 
 char ***parsePipe(char *s, int pipeCount)
 {
-	char ***pipes = (char***)calloc(pipeCount + 1, sizeof(char**));
-	char ** argv;
+	char ***pipes = (char ***)calloc(pipeCount + 1, sizeof(char **));
+	char **argv;
 	char next[100];
 	strcpy(next, s);
-	char * save = NULL;
+	char *save = NULL;
 	int x = 0;
 	while (containsPipe(next))
 	{
@@ -90,3 +90,22 @@ void pipeIt(char ***cmds, int len)
 	close(fd2[1]);
 	waitpid(pid, &status, 0);
 } // end pipeIt
+
+void freePipes(char ***pipes, int len)
+{
+	int x;
+	for (x = 0; x < len; x++) {
+		char **words = pipes[x];
+		int y = 0;
+		char *wd = pipes[x][y];
+		while (wd != NULL)
+		{
+			free(wd);
+			y += 1;
+			wd = pipes[x][y];
+		}
+		free(words);
+	}
+	free(pipes);
+	pipes = NULL;
+}

@@ -15,6 +15,27 @@ void printPrompt()
 int main()
 {
 
+	int argc = 0, pCount = 0;
+	char *s;
+	char **argv;
+	char ***toPipe;
+
+	s = (char *)calloc(100, sizeof(char));
+	fgets(s, MAX, stdin);
+	strip(s);
+	pCount = containsPipe(s);
+
+	toPipe = parsePipe(s, pCount);
+	pipeIt(toPipe, pCount + 1);
+
+	freePipes(toPipe, pCount + 1);
+	free(s);
+}
+
+/* 
+int main()
+{
+
 	int argc, pipeCount;
 	char **argv = NULL;
 	int preCount = 0, postCount = 0;
@@ -37,18 +58,23 @@ int main()
 	while (strcmp(s, "exit") != 0)
 	{
 		int pipeCount = containsPipe(s);
-		printf("got pipecount %d\n", pipeCount);
+		//printf("got pipecount %d\n", pipeCount);
 		if (pipeCount > 0)
 		{
 			char ***pipes = parsePipe(s, pipeCount);
 			int x = 0;
+			int y;
+			for (y = 0; y <= pipeCount; y++)
+			{
+				printf("%d)\n", y);
+				printargs(pipes[x]);
+			}
 			pipeIt(pipes, x);
 			free(pipes);
 
 		} // end if pipeCount
 		else
 		{
-			
 		}
 
 		printPrompt();
@@ -56,7 +82,7 @@ int main()
 		strip(s);
 		x++;
 
-	} // end while*/
+	} // end while
 
 	//pipeIt(pipCmds, 2);
 
@@ -65,4 +91,4 @@ int main()
 	printf("exit\n");
 	return 0;
 
-} // end main
+} // end main */

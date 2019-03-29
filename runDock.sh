@@ -1,2 +1,2 @@
 cd memory-test
-docker run -it -v $PWD/..:/lshell memory-test:0.1
+docker run --name lshMT -it  -v $PWD/..:/lshell memory-test

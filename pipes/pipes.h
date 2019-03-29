@@ -17,6 +17,7 @@ char ** parsePrePipe(char **s);
 char * parsePostPipe(char *s, int * postCount);
 void pipeIt(char *** cmds, int count);
 char *** parsePipe(char * s, int pipeCount);
+void freePipes(char ***pipes, int len);
 
 
 #endif 
